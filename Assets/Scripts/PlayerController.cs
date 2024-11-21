@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 35f; // Velocidad del jugador
-    public float jumpForce = 10f; // Fuerza de salto inicial
-    public float maxJumpForce = 20f; // Fuerza máxima de salto (máxima altura que puede alcanzar)
-    public float jumpHoldTime = 0.5f; // Tiempo máximo de acumulación de salto
+    public float speed = 10f; // Velocidad del jugador
+    public float jumpForce = 5f; // Fuerza de salto inicial
+    public float maxJumpForce = 10f; // Fuerza máxima de salto (máxima altura que puede alcanzar)
+    public float jumpHoldTime = 0.2f; // Tiempo máximo de acumulación de salto
     public Transform groundCheck; // Detector de suelo
     public float groundCheckRadius = 0.2f; // Radio de verificación de suelo
     public LayerMask groundLayer; // Capa para detectar suelo
@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private bool isJumping = false; // Estado de si el personaje está saltando
     private bool canDoubleJump = false; // Si el jugador puede hacer doble salto
 
+    private bool isFalling = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>(); // Obtiene el Rigidbody2D del personaje
@@ -30,6 +32,8 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("isJumping: " + isJumping);
         Debug.Log("canDoubleJump: " + canDoubleJump);
+        Debug.Log("isFalling: " + isFalling);
+
         // Verificar si el personaje está en el suelo
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
@@ -53,6 +57,23 @@ public class PlayerController : MonoBehaviour
             // Resetear las condiciones cuando el personaje está en el suelo
             canDoubleJump = true; // El jugador puede hacer doble salto
             currentJumpForce = 0f; // Resetear la fuerza acumulada del salto
+            isJumping = false; // Marcar que ya no está saltando cuando toca el suelo
+            isFalling = false; // El jugador no está cayendo
+            animator.SetBool("isFalling", false); // Desactivar animación de caída
+        }
+        else
+        {
+            // Si no está en el suelo, verificar si está cayendo
+            if (rb.velocity.y < 0) // El jugador está cayendo (velocidad en Y negativa)
+            {
+                isFalling = true;
+                animator.SetBool("isFalling", true); // Activar animación de caída
+            }
+            else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space)) // Si está subiendo pero la tecla de salto ya no está presionada
+            {
+                isFalling = false;
+                animator.SetBool("isFalling", false); // Desactivar animación de caída si está subiendo
+            }
         }
 
         // Detectar si presionas la tecla de salto
@@ -76,22 +97,29 @@ public class PlayerController : MonoBehaviour
             {
                 Jump();
                 isJumping = true; // Marcar que el jugador está saltando
+                animator.SetBool("isJumping", true); // Activar animación de salto
             }
             else if (canDoubleJump)
             {
                 // Si no está en el suelo pero tiene el power-up de doble salto
                 DoubleJump();
                 canDoubleJump = false; // Deshabilitar el doble salto después de usarlo
+                isJumping = true; // Asegurar que se mantenga el estado de salto
+                animator.SetBool("isJumping", true); // Activar animación de salto
             }
         }
 
         // Si el jugador suelta la tecla, aplicar la fuerza acumulada
-        if (Input.GetKeyUp(KeyCode.Space) && isJumping)
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             // Aplicar la fuerza acumulada
-            rb.velocity = new Vector2(rb.velocity.x, currentJumpForce);
-            currentJumpForce = 0f; // Resetear la fuerza acumulada
-            isJumping = false; // Marcar que ya no está saltando
+            if (isJumping)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, currentJumpForce);
+                currentJumpForce = 0f; // Resetear la fuerza acumulada
+                isJumping = false; // Marcar que ya no está saltando
+                animator.SetBool("isJumping", false); // Desactivar animación de salto
+            }
         }
     }
 
@@ -121,10 +149,11 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true; // Marcar que está tocando el suelo
             canDoubleJump = true; // Permitir el doble salto si vuelve a tocar el suelo
+            isJumping = false; // Terminar el estado de salto cuando toca el suelo
+            animator.SetBool("isJumping", false); // Desactivar animación de salto
         }
     }
 
-    // Método para detectar cuando el jugador deja de tocar el suelo
     private void OnCollisionExit2D(Collision2D collision)
     {
         // Si el jugador deja de tocar el suelo, actualizar el estado de isGrounded

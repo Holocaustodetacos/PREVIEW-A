@@ -1,0 +1,9 @@
+Plataformas:
+150 ancho - 64 largo
+
+Pared Plataformas:
+150 ancho - 30 largo
+
+Humanoides:
+32 ancho - 64 largo
+
