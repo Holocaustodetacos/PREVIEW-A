@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 10f;
-    public float jumpForce = 5f;
+    public float jumpForce = 6f;
     public float maxJumpForce = 10f;
+    public float fastFallSpeed = 20f; // Nueva variable para la velocidad de caída rápida
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
@@ -17,8 +18,9 @@ public class PlayerController : MonoBehaviour
     private float currentJumpForce = 0f;
     private bool isJumping = false;
     private bool canDoubleJump = false;
-
     private bool isFalling = false;
+    private bool isFallingFast = false; // Nueva variable para caída rápida
+    private bool isIdle = false;
 
     void Start()
     {
@@ -28,18 +30,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("isGrounded: " + isGrounded);
-        Debug.Log("isJumping: " + isJumping);
-        Debug.Log("canDoubleJump: " + canDoubleJump);
-        Debug.Log("isFalling: " + isFalling);
-
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        Debug.Log("GroundCheck position: " + groundCheck.position);
-        Debug.Log("GroundCheck radius: " + groundCheckRadius);
-        Debug.Log("GroundLayer: " + groundLayer);
 
         float moverHorizontal = Input.GetAxisRaw("Horizontal");
-        float moverVertical = Input.GetAxisRaw("Vertical");
 
         // Crear vector de movimiento
         movement = new Vector2(moverHorizontal, rb.velocity.y);
@@ -55,58 +48,80 @@ public class PlayerController : MonoBehaviour
             currentJumpForce = 0f;
             isJumping = false;
             isFalling = false;
+            isFallingFast = false;
+            animator.SetBool("isFalling", false);
+            animator.SetBool("isFallingFast", false);
+        }
+        else if (rb.velocity.y < 0 && !isFallingFast)
+        {
+            isFalling = true;
+            animator.SetBool("isFalling", true);
+        }
+        else if (rb.velocity.y > 0)
+        {
+            isFalling = false;
             animator.SetBool("isFalling", false);
         }
-        else
-        {
-            if (rb.velocity.y < 0)
-            {
-                isFalling = true;
-                animator.SetBool("isFalling", true);
-            }
-            else if (rb.velocity.y > 0)
-            {
-                isFalling = false;
-                animator.SetBool("isFalling", false);
-            }
-        }
 
-        if (moverVertical > 0)
-        {
-            if (isGrounded || (canDoubleJump && !isGrounded))
-            {
-                currentJumpForce += jumpForce * Time.deltaTime;
-                currentJumpForce = Mathf.Clamp(currentJumpForce, 0f, maxJumpForce);
-            }
-        }
-
-        if (moverVertical > 0 && isGrounded)
+        // Saltar solo si el jugador está en el suelo o puede hacer doble salto
+        if (Input.GetKeyDown(KeyCode.W) && (isGrounded || (canDoubleJump && !isGrounded)))
         {
             Jump();
             isJumping = true;
-            animator.SetBool("isJumping", true);
-        }
-        else if (moverVertical > 0 && canDoubleJump)
-        {
-            DoubleJump();
-            canDoubleJump = false;
-            isJumping = true;
+            if (!isGrounded && canDoubleJump)
+            {
+                canDoubleJump = false;
+            }
             animator.SetBool("isJumping", true);
         }
 
-        if (moverVertical == 0 && isJumping)
+        // Ajustar la fuerza del salto mientras se mantiene presionada la tecla de salto
+        if (Input.GetKey(KeyCode.W) && isJumping)
+        {
+            currentJumpForce += jumpForce * Time.deltaTime;
+            currentJumpForce = Mathf.Clamp(currentJumpForce, 0f, maxJumpForce);
+        }
+
+        // Aplicar la fuerza del salto cuando se suelta la tecla de salto
+        if (Input.GetKeyUp(KeyCode.W) && isJumping)
         {
             rb.velocity = new Vector2(rb.velocity.x, currentJumpForce);
             currentJumpForce = 0f;
             isJumping = false;
-            animator.SetBool("isJumping", false);
         }
 
         // Detectar si se presiona la tecla "S" para descender rápidamente
         if (Input.GetKey(KeyCode.S))
         {
-            rb.velocity = new Vector2(rb.velocity.x, -speed * 2); // Ajusta la velocidad de descenso según sea necesario
-            animator.SetBool("isFalling", true); // Activar animación de caída
+            rb.velocity = new Vector2(rb.velocity.x, -fastFallSpeed); // Ajusta la velocidad de descenso rápido
+            isFallingFast = true;
+            animator.SetBool("isFallingFast", true); // Activar animación de caída rápida
+        }
+
+        // Actualizar animación de caída según la velocidad vertical
+        if (rb.velocity.y < 0 && !isFalling && !isFallingFast)
+        {
+            isFalling = true;
+            animator.SetBool("isFalling", true);
+        }
+        else if (rb.velocity.y >= 0 && (isFalling || isFallingFast))
+        {
+            isFalling = false;
+            isFallingFast = false;
+            animator.SetBool("isFalling", false);
+            animator.SetBool("isFallingFast", false);
+        }
+
+        // Detectar si el jugador está inactivo
+        if (moverHorizontal == 0 && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        {
+            isIdle = true;
+            animator.SetBool("isIdle", true);
+        }
+        else
+        {
+            isIdle = false;
+            animator.SetBool("isIdle", false);
         }
     }
 
@@ -120,11 +135,6 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
-    private void DoubleJump()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce * 1.5f);
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (((1 << collision.gameObject.layer) & groundLayer) != 0)
@@ -132,7 +142,13 @@ public class PlayerController : MonoBehaviour
             isGrounded = true;
             canDoubleJump = true;
             isJumping = false;
+            isFalling = false;
+            isFallingFast = false;
+            isIdle = false;
             animator.SetBool("isJumping", false);
+            animator.SetBool("isFalling", false);
+            animator.SetBool("isFallingFast", false);
+            animator.SetBool("isIdle", false);
         }
     }
 
