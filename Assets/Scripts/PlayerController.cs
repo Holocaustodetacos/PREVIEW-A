@@ -6,8 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 10f;
     public float jumpForce = 6f;
-    public float maxJumpForce = 10f;
-    public float fastFallSpeed = 20f; // Nueva variable para la velocidad de caída rápida
+    public float maxJumpForce = 10f; 
+    public float fastFallSpeed = 10f; // Nueva variable para la velocidad de caída rápida
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private bool isFalling = false;
     private bool isFallingFast = false; // Nueva variable para caída rápida
     private bool isIdle = false;
+    private bool hasJumped = false;
+
 
     void Start()
     {
@@ -31,7 +33,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-
         float moverHorizontal = Input.GetAxisRaw("Horizontal");
 
         // Crear vector de movimiento
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
             isFalling = false;
             isFallingFast = false;
+            hasJumped = false;
             animator.SetBool("isFalling", false);
             animator.SetBool("isFallingFast", false);
         }
@@ -63,16 +65,10 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isFalling", false);
         }
 
-        // Saltar solo si el jugador está en el suelo o puede hacer doble salto
-        if (Input.GetKeyDown(KeyCode.W) && (isGrounded || (canDoubleJump && !isGrounded)))
+        // Saltar solo si el jugador está en el suelo y no ha saltado
+        if (Input.GetKeyDown(KeyCode.W) && (isGrounded && !hasJumped))
         {
             Jump();
-            isJumping = true;
-            if (!isGrounded && canDoubleJump)
-            {
-                canDoubleJump = false;
-            }
-            animator.SetBool("isJumping", true);
         }
 
         // Ajustar la fuerza del salto mientras se mantiene presionada la tecla de salto
@@ -125,6 +121,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
     void FixedUpdate()
     {
         rb.velocity = new Vector2(movement.x * speed, rb.velocity.y);
@@ -132,7 +129,12 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        if (isGrounded && !hasJumped)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            hasJumped = true; // Marca que el personaje ha saltado
+            animator.SetBool("isJumping", true);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

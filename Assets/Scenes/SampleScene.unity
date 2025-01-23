@@ -2151,7 +2151,7 @@ MonoBehaviour:
   speed: 10
   jumpForce: 6
   maxJumpForce: 10
-  fastFallSpeed: 20
+  fastFallSpeed: 10
   groundCheck: {fileID: 286774315}
   groundCheckRadius: 5
   groundLayer:
