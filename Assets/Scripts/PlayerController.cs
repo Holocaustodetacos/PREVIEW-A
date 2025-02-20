@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,22 +9,23 @@ public class PlayerController : MonoBehaviour
     public float speed = 10f;
     public float jumpForce = 6f;
     public float maxJumpForce = 10f; 
-    public float fastFallSpeed = 10f; // Nueva variable para la velocidad de caída rápida
+    public float fastFallSpeed = 10f;
     public Transform groundCheck;
     public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     public Rigidbody2D rb;
     private Animator animator;
     private Vector2 movement;
-    private bool isGrounded;
+    private bool isGround;
     private float currentJumpForce = 0f;
+    private bool isGrounded = false;
     private bool isJumping = false;
     private bool canDoubleJump = false;
     private bool isFalling = false;
-    private bool isFallingFast = false; // Nueva variable para caída rápida
+    private bool isFallingFast = false;
     private bool isIdle = false;
     private bool hasJumped = false;
-
+    private int auxJump = 0;
 
     void Start()
     {
@@ -30,9 +33,10 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    void Update()
+    async Task Update()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        //isGrounded = // Debo crear otra variable para detectar el suelo?
         float moverHorizontal = Input.GetAxisRaw("Horizontal");
 
         // Crear vector de movimiento
@@ -43,7 +47,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("facingLeft", moverHorizontal < 0);
         animator.SetBool("facingRight", moverHorizontal > 0);
 
-        if (isGrounded)
+        if (isGround)
         {
             canDoubleJump = true;
             currentJumpForce = 0f;
@@ -51,6 +55,7 @@ public class PlayerController : MonoBehaviour
             isFalling = false;
             isFallingFast = false;
             hasJumped = false;
+            isIdle = true;
             animator.SetBool("isFalling", false);
             animator.SetBool("isFallingFast", false);
         }
@@ -66,9 +71,17 @@ public class PlayerController : MonoBehaviour
         }
 
         // Saltar solo si el jugador está en el suelo y no ha saltado
-        if (Input.GetKeyDown(KeyCode.W) && (isGrounded && !hasJumped))
+        if (Input.GetKeyDown(KeyCode.W) && isGround && !hasJumped)
         {
-            Jump();
+            if (auxJump < 2)
+            {
+                Jump();
+                auxJump ++;
+            } else if (!isGrounded && hasJumped)
+            {
+                auxJump = 0;
+            }
+            print(auxJump);
         }
 
         // Ajustar la fuerza del salto mientras se mantiene presionada la tecla de salto
@@ -129,7 +142,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (isGrounded && !hasJumped)
+        if (isGround && !hasJumped)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             hasJumped = true; // Marca que el personaje ha saltado
@@ -141,7 +154,7 @@ public class PlayerController : MonoBehaviour
     {
         if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
-            isGrounded = true;
+            isGround = true;
             canDoubleJump = true;
             isJumping = false;
             isFalling = false;
@@ -158,7 +171,7 @@ public class PlayerController : MonoBehaviour
     {
         if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
-            isGrounded = false;
+            isGround = false;
         }
     }
 }
