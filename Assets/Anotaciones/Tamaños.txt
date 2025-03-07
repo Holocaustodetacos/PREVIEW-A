@@ -1,9 +1,25 @@
 Plataformas:
-150 ancho - 64 largo
+64 ancho - 150 largo
 
-Pared Plataformas:
-150 ancho - 30 largo
+Paredes
+150 ancho - 150 largo
 
-Humanoides:
-32 ancho - 64 largo
+Ano 
+64 - 64 = 230 m 
+
+Monstruos basicos 
+50 - 32
+
+Enemigos nromales 
+64 - 64 
+
+Enemigos especiales 
+100 - 100
+
+Pisos 
+50 - 200
+
+Boss 
+240 - 240 
+
 

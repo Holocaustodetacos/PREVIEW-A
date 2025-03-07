@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isGround && !hasJumped)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);         
             hasJumped = true; // Marca que el personaje ha saltado
             animator.SetBool("isJumping", true);
         }
