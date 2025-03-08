@@ -1129,12 +1129,11 @@ Transform:
   m_GameObject: {fileID: 286774314}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.38, y: -2.66, z: -0.044539213}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.12, y: -0.89, z: -0.044539213}
+  m_LocalScale: {x: 0.9379983, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 811155652}
-  m_Father: {fileID: 0}
+  m_Children: []
+  m_Father: {fileID: 677403035}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &294781510
 GameObject:
@@ -2912,10 +2911,11 @@ Transform:
   m_GameObject: {fileID: 677403033}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.3, y: -1.31, z: 0}
+  m_LocalPosition: {x: -5.3, y: -1.64, z: 0}
   m_LocalScale: {x: 1.0661, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 286774315}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &677403036
@@ -2962,7 +2962,7 @@ MonoBehaviour:
   maxJumpForce: 10
   fastFallSpeed: 10
   groundCheck: {fileID: 286774315}
-  groundCheckRadius: 0.2
+  groundCheckRadius: 0.45
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -3318,7 +3318,7 @@ Transform:
   m_GameObject: {fileID: 811155651}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9986775, y: 0.9217807, z: -0.006738741}
+  m_LocalPosition: {x: -2.3813226, y: -1.7382194, z: -0.051277954}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3374,7 +3374,7 @@ Transform:
   - {fileID: 1941130992}
   - {fileID: 1451759071}
   - {fileID: 939514747}
-  m_Father: {fileID: 286774315}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &835269737
 GameObject:
@@ -8392,7 +8392,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 677403035}
-  - {fileID: 286774315}
+  - {fileID: 811155652}
   - {fileID: 1908831172}
   - {fileID: 1819976733}
   - {fileID: 1626342104}

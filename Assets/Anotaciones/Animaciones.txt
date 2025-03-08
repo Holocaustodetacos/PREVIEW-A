@@ -1,0 +1,4 @@
+Para crear animaciones de un sprite procura primero elejir el sprite al que
+quieres crearle una animacion para despues agregar los srpites de ese personaje
+en la ventana de m_AllowConstantClipSamplingOptimization
+Pendejo... <3

@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -33,7 +29,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    async Task Update()
+    void Update()
     {
         isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         //isGrounded = // Debo crear otra variable para detectar el suelo?
@@ -58,6 +54,7 @@ public class PlayerController : MonoBehaviour
             isIdle = true;
             animator.SetBool("isFalling", false);
             animator.SetBool("isFallingFast", false);
+            animator.SetBool("Attack", false);
         }
         else if (rb.velocity.y < 0 && !isFallingFast)
         {
@@ -70,18 +67,17 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isFalling", false);
         }
 
+        // Verifica si se presionó el botón M1 (clic izquierdo del mouse)
+        if (Input.GetMouseButton(0)) // 0 = clic izquierdo, 1 = clic derecho, 2 = clic central
+        {
+            // Activa el trigger "Attack" en el Animator
+            animator.SetBool("Attack", true);
+        }
+
         // Saltar solo si el jugador está en el suelo y no ha saltado
         if (Input.GetKeyDown(KeyCode.W) && isGround && !hasJumped)
         {
-            if (auxJump < 2)
-            {
-                Jump();
-                auxJump ++;
-            } else if (!isGrounded && hasJumped)
-            {
-                auxJump = 0;
-            }
-            print(auxJump);
+            Jump();
         }
 
         // Ajustar la fuerza del salto mientras se mantiene presionada la tecla de salto
