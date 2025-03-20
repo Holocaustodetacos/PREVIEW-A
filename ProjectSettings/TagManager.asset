@@ -13,7 +13,7 @@ TagManager:
   - Water
   - UI
   - Muro
-  - 
+  - Player
   - 
   - 
   - 
@@ -48,6 +48,6 @@ TagManager:
   - name: Muro
     uniqueID: 4146347071
     locked: 0
-  - name: Jugador
+  - name: Player
     uniqueID: 2192810653
     locked: 0

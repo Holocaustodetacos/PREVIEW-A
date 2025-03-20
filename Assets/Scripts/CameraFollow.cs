@@ -5,8 +5,8 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform player;          // Referencia al jugador
-    public float offsetX = 100f;        // Desplazamiento en el eje X
-    public float offsetY = 2f;        // Desplazamiento en el eje Y (puedes ajustarlo según lo que quieras)
+    public float offsetX = 0f;        // Desplazamiento en el eje X
+    public float offsetY = 0f;        // Desplazamiento en el eje Y (puedes ajustarlo según lo que quieras)
     public float smoothSpeed = 0.5f; // Velocidad de suavizado del movimiento de la cámara
 
     void Start() {}

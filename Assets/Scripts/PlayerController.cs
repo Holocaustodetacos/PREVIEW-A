@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float life = 100;
     public float speed = 10f;
     public float jumpForce = 6f;
     public float maxJumpForce = 10f; 
@@ -171,3 +172,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
+
