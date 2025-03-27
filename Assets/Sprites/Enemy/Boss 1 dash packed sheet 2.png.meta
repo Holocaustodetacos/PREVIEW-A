@@ -1,0 +1,405 @@
+fileFormatVersion: 2
+guid: 914e4b572a8d18e48b2de94d8d0fb7b8
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_0
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 670
+        width: 207
+        height: 210
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed9a45d9bb85e0f47938a8d7d28da02a
+      internalID: -374609573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_3
+      rect:
+        serializedVersion: 2
+        x: 1068
+        y: 650
+        width: 250
+        height: 258
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26827f726b8822f47b2d13a9f8100e6c
+      internalID: -640553376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_4
+      rect:
+        serializedVersion: 2
+        x: 394
+        y: 662
+        width: 204
+        height: 206
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25e3721afed582f4c8aaa4fdfe3b8749
+      internalID: -201643834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_6
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 657
+        width: 221
+        height: 225
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d23850499178fa4b8a5db66b76f72b2
+      internalID: 1243457590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_12
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 368
+        width: 269
+        height: 249
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7231e5cb308d39845836a9b47e8334a8
+      internalID: 1809124766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_13
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 350
+        width: 240
+        height: 266
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a41e9d293b2794746bbbdff19974e337
+      internalID: 1697216790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_15
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 335
+        width: 288
+        height: 276
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbaacd25bc1743f448f622a610e28ee5
+      internalID: -1321505449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_17
+      rect:
+        serializedVersion: 2
+        x: 1030
+        y: 339
+        width: 340
+        height: 277
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7aff18d920902d5458aaec56a3f82cfb
+      internalID: 908100378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_21
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 43
+        width: 286
+        height: 277
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5293e0a8997c51d4aabb027b7e72783c
+      internalID: -1935322003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_22
+      rect:
+        serializedVersion: 2
+        x: 351
+        y: 24
+        width: 333
+        height: 276
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c89eaf8d89261754789da07761f89fbc
+      internalID: -2555135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_23
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 21
+        width: 257
+        height: 267
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 119d4b6d0051d2e4eb7eed81991ca312
+      internalID: -1689418814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boss 1 dash packed sheet 2_24
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 27
+        width: 207
+        height: 210
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 798e0e4d81301da4baa04447af2da7c4
+      internalID: 1917969270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Boss 1 dash packed sheet 2_0: -374609573
+      Boss 1 dash packed sheet 2_1: -929243356
+      Boss 1 dash packed sheet 2_10: 1023333446
+      Boss 1 dash packed sheet 2_11: 1555002168
+      Boss 1 dash packed sheet 2_12: 1809124766
+      Boss 1 dash packed sheet 2_13: 1697216790
+      Boss 1 dash packed sheet 2_14: 1007572647
+      Boss 1 dash packed sheet 2_15: -1321505449
+      Boss 1 dash packed sheet 2_16: -1353629058
+      Boss 1 dash packed sheet 2_17: 908100378
+      Boss 1 dash packed sheet 2_18: -352860593
+      Boss 1 dash packed sheet 2_19: -687830261
+      Boss 1 dash packed sheet 2_2: 1899926068
+      Boss 1 dash packed sheet 2_20: -1510008598
+      Boss 1 dash packed sheet 2_21: -1935322003
+      Boss 1 dash packed sheet 2_22: -2555135
+      Boss 1 dash packed sheet 2_23: -1689418814
+      Boss 1 dash packed sheet 2_24: 1917969270
+      Boss 1 dash packed sheet 2_25: -1841631208
+      Boss 1 dash packed sheet 2_3: -640553376
+      Boss 1 dash packed sheet 2_4: -201643834
+      Boss 1 dash packed sheet 2_5: -876992610
+      Boss 1 dash packed sheet 2_6: 1243457590
+      Boss 1 dash packed sheet 2_7: -134576134
+      Boss 1 dash packed sheet 2_8: 2039363468
+      Boss 1 dash packed sheet 2_9: -2088595335
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
