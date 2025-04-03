@@ -3,6 +3,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float life = 100;
+    public int vidas = 3;
+    public Transform puntoRespawn;
     public float speed = 10f;
     public float jumpForce = 6f;
     public float maxJumpForce = 10f; 
@@ -144,6 +146,37 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);         
             hasJumped = true; // Marca que el personaje ha saltado
             animator.SetBool("isJumping", true);
+        }
+    }
+
+    public void Morir()
+    {
+        transform.position = puntoRespawn.position;
+        GetComponent<SpriteRenderer>().enabled = true; // En el método Morir()
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = Vector2.zero; // Detiene el movimiento
+        }
+        if (vidas > 0)
+        {
+            vidas--; // Reduce una vida
+            Debug.Log("¡Has muerto! Vidas restantes: " + vidas);
+            
+            /* // Efecto de sonido (opcional) */
+            /* if (sonidoMuerte != null && audioSource != null) */
+            /* { */
+            /*     audioSource.PlayOneShot(sonidoMuerte); */
+            /* } */
+
+            // Reinicia posición
+            transform.position = puntoRespawn.position;
+        }
+        else
+        {
+            Debug.Log("Game Over");
+            // Aquí puedes cargar una escena de Game Over o desactivar al jugador
+            gameObject.SetActive(false);
         }
     }
 
