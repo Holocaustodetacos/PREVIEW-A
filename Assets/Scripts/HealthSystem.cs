@@ -3,30 +3,46 @@ using UnityEngine.Events;
 
 public class HealthSystem : MonoBehaviour
 {
+    [Header("Damage")]
     public int maxHealth = 100;
     public int currentHealth;
     public bool isPlayer = false;
-    
     public UnityEvent onDeath;
     public UnityEvent<int> onDamageTaken;
     public UnityEvent<int> onHeal;
+
+    [Header("Knockback")]
+    public bool applyKnockback = true;
+    public Knockback knockbackSystem;
 
     void Start()
     {
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Vector2 damageSourcePosition)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
         
         onDamageTaken.Invoke(damage);
+
+        // Aplicar knockback si está configurado
+        if(applyKnockback && knockbackSystem != null)
+        {
+            knockbackSystem.ApplyKnockback(damageSourcePosition);
+        }
         
         if(currentHealth <= 0)
         {
             Die();
         }
+    }
+
+    // Mantén tu TakeDamage original para compatibilidad
+    public void TakeDamage(int damage)
+    {
+        TakeDamage(damage, transform.position);
     }
 
     public void Heal(int amount)
