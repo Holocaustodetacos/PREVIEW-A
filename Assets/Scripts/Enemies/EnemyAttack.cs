@@ -6,9 +6,10 @@ public class EnemyAttack : MonoBehaviour
     public float attackRange = 1.5f;
     public float attackCooldown = 2f;
     public LayerMask playerLayer;
-    
     private float lastAttackTime;
     private Transform playerTransform;
+    [SerializeField] private int damageAmount = 10;
+    [SerializeField] private bool applyKnockback = true;
     
     void Start()
     {
@@ -58,5 +59,18 @@ public class EnemyAttack : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.CompareTag("Player"))
+        {
+            HealthSystem playerHealth = other.GetComponent<HealthSystem>();
+            if(playerHealth != null)
+            {
+                // Pasa la posición del enemigo como origen del knockback
+                playerHealth.TakeDamage(damageAmount, transform.position);
+            }
+        }
     }
 }

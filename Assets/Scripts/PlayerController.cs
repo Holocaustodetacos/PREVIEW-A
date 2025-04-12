@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float life = 100;
     public int vidas = 3;
     public Transform puntoRespawn;
     public float speed = 10f;
@@ -25,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool isIdle = false;
     private bool hasJumped = false;
     private int auxJump = 0;
+    private bool canMove = true;
 
     void Start()
     {
@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if(!canMove) return;
+
         isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         //isGrounded = // Debo crear otra variable para detectar el suelo?
         float moverHorizontal = Input.GetAxisRaw("Horizontal");
@@ -202,6 +204,16 @@ public class PlayerController : MonoBehaviour
         if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
             isGround = false;
+        }
+    }
+
+    public void SetMovementEnabled(bool enabled)
+    {
+        canMove = enabled;
+        if(!enabled)
+        {
+            // Detener movimiento inmediato
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         }
     }
 }
