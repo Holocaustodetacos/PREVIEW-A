@@ -1,4 +1,3 @@
-// HealthBar.cs
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +8,14 @@ public class HealthBar : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Image fillImage;
     
-    [Header("Colores")]
-    [SerializeField] private Color fullHealthColor = Color.green;
-    [SerializeField] private Color zeroHealthColor = Color.red;
+    [Header("Colores por Nivel")]
+    [SerializeField] private Color highHealthColor = Color.green;    // Por encima del 80%
+    [SerializeField] private Color mediumHealthColor = new Color(1f, 0.65f, 0f); // Naranja
+    [SerializeField] private Color lowHealthColor = Color.red;       // Por debajo del 30%
+    
+    [Header("Umbrales")]
+    [SerializeField] [Range(0, 1)] private float mediumHealthThreshold = 0.8f;
+    [SerializeField] [Range(0, 1)] private float lowHealthThreshold = 0.3f;
     
     private HealthSystem healthSystem;
 
@@ -34,23 +38,32 @@ public class HealthBar : MonoBehaviour
 
     private void UpdateHealthUI(int _)
     {
-        // El parámetro de daño/curación no lo usamos aquí
         healthSlider.value = healthSystem.currentHealth;
         UpdateHealthColor();
     }
 
     private void UpdateHealthColor()
     {
-        if(fillImage != null)
+        if(fillImage == null) return;
+        
+        float normalizedHealth = healthSlider.normalizedValue;
+        
+        if(normalizedHealth > mediumHealthThreshold)
         {
-            fillImage.color = Color.Lerp(zeroHealthColor, fullHealthColor, 
-                                       healthSlider.normalizedValue);
+            // Transición entre verde y naranja
+            float t = (normalizedHealth - mediumHealthThreshold) / (1f - mediumHealthThreshold);
+            fillImage.color = Color.Lerp(mediumHealthColor, highHealthColor, t);
+        }
+        else
+        {
+            // Transición entre naranja y rojo
+            float t = normalizedHealth / lowHealthThreshold;
+            fillImage.color = Color.Lerp(lowHealthColor, mediumHealthColor, t);
         }
     }
 
     private void OnDestroy()
     {
-        // Importante: desuscribirse de eventos para evitar memory leaks
         if(healthSystem != null)
         {
             healthSystem.onDamageTaken.RemoveListener(UpdateHealthUI);

@@ -47,8 +47,19 @@ public class HealthSystem : MonoBehaviour
 
     public void Heal(int amount)
     {
+        int previousHealth = currentHealth;
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
-        onHeal.Invoke(amount);
+    
+        // Solo disparar evento si realmente hubo curación
+        if(currentHealth > previousHealth)
+        {
+            onHeal.Invoke(currentHealth - previousHealth);
+        }
+    }
+
+    public void RestoreFullHealth()
+    {
+        Heal(maxHealth);
     }
 
     private void Die()
