@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class PlayerController : MonoBehaviour
     private bool hasJumped = false;
     private int auxJump = 0;
     private bool canMove = true;
+
+    [Header("Eventos")]
+    public UnityEvent onLivesChanged; // Evento cuando cambian las vidas
 
     void Start()
     {
@@ -154,30 +158,31 @@ public class PlayerController : MonoBehaviour
     public void Morir()
     {
         transform.position = puntoRespawn.position;
-        GetComponent<SpriteRenderer>().enabled = true; // En el método Morir()
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        GetComponent<SpriteRenderer>().enabled = true;
+        
         if (rb != null)
         {
-            rb.velocity = Vector2.zero; // Detiene el movimiento
+            rb.velocity = Vector2.zero;
         }
+        
         if (vidas > 0)
         {
-            vidas--; // Reduce una vida
-            Debug.Log("¡Has muerto! Vidas restantes: " + vidas);
+            vidas--;
+        
+            HealthSystem healthSystem = GetComponent<HealthSystem>();
+            if(healthSystem != null)
+            {
+                healthSystem.RestoreFullHealth(); // Usa el nuevo método
+            }
             
-            /* // Efecto de sonido (opcional) */
-            /* if (sonidoMuerte != null && audioSource != null) */
-            /* { */
-            /*     audioSource.PlayOneShot(sonidoMuerte); */
-            /* } */
-
-            // Reinicia posición
+            Debug.Log("¡Has muerto! Vidas restantes: " + vidas + ". Vida restablecida.");
+            onLivesChanged.Invoke();
+            
             transform.position = puntoRespawn.position;
         }
         else
         {
             Debug.Log("Game Over");
-            // Aquí puedes cargar una escena de Game Over o desactivar al jugador
             gameObject.SetActive(false);
         }
     }

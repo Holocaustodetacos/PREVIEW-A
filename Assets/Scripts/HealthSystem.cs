@@ -3,35 +3,52 @@ using UnityEngine.Events;
 
 public class HealthSystem : MonoBehaviour
 {
-    [Header("Damage")]
+    [Header("Configuración")]
     public int maxHealth = 100;
-    public int currentHealth;
+    [SerializeField] private int _currentHealth; // Ahora privado con serialización
     public bool isPlayer = false;
+    
+    [Header("Eventos")]
     public UnityEvent onDeath;
-    public UnityEvent<int> onDamageTaken;
-    public UnityEvent<int> onHeal;
+    public UnityEvent<int> onDamageTaken; // Envía la vida ACTUAL después del daño
+    public UnityEvent<int> onHeal; // Envía la vida ACTUAL después de la cura
 
-    [Header("Knockback")]
-    public bool applyKnockback = true;
-    public Knockback knockbackSystem;
+    [Header("Invencibilidad")]
+    public float invincibilityDuration = 0.5f;
+    private bool isInvincible = false;
+    private float invincibilityEndTime;
+
+    // Propiedad para acceso controlado
+    public int currentHealth {
+        get => _currentHealth;
+        private set {
+            _currentHealth = Mathf.Clamp(value, 0, maxHealth);
+        }
+    }
 
     void Start()
     {
-        currentHealth = maxHealth;
+        _currentHealth = maxHealth; // Inicialización directa
+        Debug.Log($"Vida inicializada: {currentHealth}/{maxHealth}");
     }
 
-    public void TakeDamage(int damage, Vector2 damageSourcePosition)
+    public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(0, currentHealth);
-        
-        onDamageTaken.Invoke(damage);
-
-        // Aplicar knockback si está configurado
-        if(applyKnockback && knockbackSystem != null)
+        if(isInvincible && Time.time < invincibilityEndTime) 
         {
-            knockbackSystem.ApplyKnockback(damageSourcePosition);
+            Debug.Log("Daño bloqueado por invencibilidad");
+            return;
         }
+        
+        int previousHealth = currentHealth;
+        currentHealth -= damage;
+        
+        isInvincible = true;
+        invincibilityEndTime = Time.time + invincibilityDuration;
+        
+        // Ahora envía la vida ACTUAL, no el daño recibido
+        onDamageTaken.Invoke(currentHealth);
+        Debug.Log($"Daño recibido: {damage}. Vida actual: {currentHealth}/{maxHealth}");
         
         if(currentHealth <= 0)
         {
@@ -39,33 +56,27 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    // Mantén tu TakeDamage original para compatibilidad
-    public void TakeDamage(int damage)
-    {
-        TakeDamage(damage, transform.position);
-    }
-
     public void Heal(int amount)
     {
-        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
-        onHeal.Invoke(amount);
+        int previousHealth = currentHealth;
+        currentHealth += amount;
+        
+        if(currentHealth > previousHealth)
+        {
+            onHeal.Invoke(currentHealth);
+        }
+    }
+
+    public void RestoreFullHealth()
+    {
+        Heal(maxHealth);
     }
 
     private void Die()
     {
         onDeath.Invoke();
+        Debug.Log(isPlayer ? "Jugador derrotado" : "Enemigo derrotado");
         
-        if(isPlayer)
-        {
-            // Lógica cuando el jugador muere
-            Debug.Log("Jugador derrotado");
-            // Puedes reiniciar el nivel o mostrar game over
-        }
-        else
-        {
-            // Lógica cuando el enemigo muere
-            Debug.Log("Enemigo derrotado");
-            Destroy(gameObject);
-        }
+        if(!isPlayer) Destroy(gameObject);
     }
 }

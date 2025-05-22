@@ -20,6 +20,10 @@ public class ArañaLogic : MonoBehaviour
     private bool isWaiting = false;
     private float waitTimer = 0f;
 
+    [Header("Daño por Colisión")]
+    public int contactDamage = 10;
+    public float knockbackForce = 5f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -110,12 +114,28 @@ public class ArañaLogic : MonoBehaviour
         lastJumpTime = Time.time;
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Verifica si la araña está en el suelo
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = true;
+        }
+        else if (collision.gameObject.CompareTag("Player"))
+        {
+            HealthSystem playerHealth = collision.gameObject.GetComponent<HealthSystem>();
+            if(playerHealth != null)
+            {
+                playerHealth.TakeDamage(contactDamage);
+                
+                // Aplicar knockback
+                Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
+                Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
+                if(playerRb != null)
+                {
+                    playerRb.velocity = Vector2.zero;
+                    playerRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
+                }
+            }
         }
     }
 
