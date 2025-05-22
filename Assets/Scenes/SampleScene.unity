@@ -4835,6 +4835,8 @@ MonoBehaviour:
   - {fileID: 1410663631}
   - {fileID: 1710756093}
   waitTime: 1
+  contactDamage: 10
+  knockbackForce: 5
 --- !u!114 &938402207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4853,8 +4855,8 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
-  damageAmount: 10
   applyKnockback: 1
+  knockbackForce: 5
 --- !u!114 &938402208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4868,7 +4870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 0
+  currentHealth: 100
   isPlayer: 0
   onDeath:
     m_PersistentCalls:

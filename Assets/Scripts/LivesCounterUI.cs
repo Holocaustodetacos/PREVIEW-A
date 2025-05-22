@@ -1,4 +1,3 @@
-// LivesCounterUI.cs
 using UnityEngine;
 using TMPro;
 
@@ -16,7 +15,7 @@ public class LivesCounterUI : MonoBehaviour
     {
         if(livesText != null && playerController != null)
         {
-            livesText.text = $"Vidas: {playerController.vidas}";
+            livesText.text = $"{playerController.vidas}";
         }
     }
 }

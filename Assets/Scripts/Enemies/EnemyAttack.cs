@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
+    [Header("Configuración de Ataque")]
     public int attackDamage = 10;
     public float attackRange = 1.5f;
     public float attackCooldown = 2f;
     public LayerMask playerLayer;
     private float lastAttackTime;
+    private bool hasDamagedInThisAttack = false;
+    
+    [Header("Knockback")]
+    public bool applyKnockback = true;
+    public float knockbackForce = 5f;
+    
     private Transform playerTransform;
-    [SerializeField] private int damageAmount = 10;
-    [SerializeField] private bool applyKnockback = true;
     
     void Start()
     {
@@ -30,47 +35,43 @@ public class EnemyAttack : MonoBehaviour
     
     bool PlayerInRange()
     {
-        if(playerTransform == null) return false;
-        
-        float distance = Vector2.Distance(transform.position, playerTransform.position);
-        return distance <= attackRange;
+        return playerTransform != null && 
+               Vector2.Distance(transform.position, playerTransform.position) <= attackRange;
     }
     
     void Attack()
     {
-        // Verificar si el jugador está en rango nuevamente
+        hasDamagedInThisAttack = false; // Resetear el flag
+        
         Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(transform.position, attackRange, playerLayer);
         
         foreach(Collider2D player in hitPlayers)
         {
-            HealthSystem playerHealth = player.GetComponent<HealthSystem>();
-            if(playerHealth != null)
+            if(!hasDamagedInThisAttack) // Solo dañar una vez por ataque
             {
-                playerHealth.TakeDamage(attackDamage);
-                Debug.Log("Enemigo atacó al jugador por " + attackDamage + " de daño");
+                HealthSystem playerHealth = player.GetComponent<HealthSystem>();
+                if(playerHealth != null)
+                {
+                    playerHealth.TakeDamage(attackDamage);
+                    hasDamagedInThisAttack = true;
+                    Debug.Log("Ataque conectado - Daño aplicado");
+                }
             }
         }
-        
-        // Aquí puedes añadir animación de ataque
     }
     
-    // Dibujar el rango de ataque en el editor
+    private void ApplyKnockback(Rigidbody2D playerRb, Vector2 direction)
+    {
+        if(playerRb != null)
+        {
+            playerRb.velocity = Vector2.zero; // Resetear velocidad primero
+            playerRb.AddForce(direction * knockbackForce, ForceMode2D.Impulse);
+        }
+    }
+    
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            HealthSystem playerHealth = other.GetComponent<HealthSystem>();
-            if(playerHealth != null)
-            {
-                // Pasa la posición del enemigo como origen del knockback
-                playerHealth.TakeDamage(damageAmount, transform.position);
-            }
-        }
     }
 }

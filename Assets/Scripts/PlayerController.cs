@@ -155,7 +155,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // En PlayerController.cs
     public void Morir()
     {
         transform.position = puntoRespawn.position;
@@ -168,9 +167,8 @@ public class PlayerController : MonoBehaviour
         
         if (vidas > 0)
         {
-            vidas--; // Reduce una vida
-            
-            // Restablecer la salud al máximo
+            vidas--;
+        
             HealthSystem healthSystem = GetComponent<HealthSystem>();
             if(healthSystem != null)
             {
