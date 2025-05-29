@@ -3496,16 +3496,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vidas: 3
   puntoRespawn: {fileID: 368651784}
-  speed: 4
-  jumpForce: 4
-  maxJumpForce: 10
-  fastFallSpeed: 5
-  groundCheck: {fileID: 286774315}
-  groundCheckRadius: 0.45
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  rb: {fileID: 677403036}
+  canMove: 1
+  speed: 4
+  groundCheck: {fileID: 286774315}
+  groundCheckRadius: 0.45
+  jumpForce: 4
+  maxJumpForce: 10
+  fastFallSpeed: 5
+  dashDistance: 2
+  dashDuration: 0.2
+  dashCooldown: 1
+  dashParticles: {fileID: 0}
   onLivesChanged:
     m_PersistentCalls:
       m_Calls:
@@ -3600,7 +3604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 100
+  _currentHealth: 0
   isPlayer: 1
   onDeath:
     m_PersistentCalls:
@@ -3611,8 +3615,7 @@ MonoBehaviour:
   onHeal:
     m_PersistentCalls:
       m_Calls: []
-  applyKnockback: 1
-  knockbackSystem: {fileID: 0}
+  invincibilityDuration: 0.5
 --- !u!114 &677403041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3627,11 +3630,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 108099596}
   fillImage: {fileID: 74146094}
+  healthText: {fileID: 0}
+  highThreshold: 0.8
+  lowThreshold: 0.3
   highHealthColor: {r: 0.18431373, g: 0.5647059, b: 0.078431375, a: 1}
   mediumHealthColor: {r: 0.7012578, g: 0.49229443, b: 0.10254241, a: 1}
   lowHealthColor: {r: 0.6132076, g: 0.118592024, b: 0.118592024, a: 1}
-  mediumHealthThreshold: 0.8
-  lowHealthThreshold: 0.3
 --- !u!1 &699114318
 GameObject:
   m_ObjectHideFlags: 0
@@ -4644,7 +4648,7 @@ GameObject:
   - component: {fileID: 938402206}
   - component: {fileID: 938402208}
   - component: {fileID: 938402207}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: "Ara\xF1a_1"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4709,9 +4713,9 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -4721,7 +4725,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!95 &938402203
 Animator:
@@ -4824,8 +4828,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 100
-  walkSpeed: 1
-  jumpForce: 2
+  walkSpeed: 2
+  jumpForce: 4
   detectionRange: 2
   playerLayer:
     serializedVersion: 2
@@ -4870,7 +4874,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 100
+  _currentHealth: 0
   isPlayer: 0
   onDeath:
     m_PersistentCalls:
@@ -4881,8 +4885,7 @@ MonoBehaviour:
   onHeal:
     m_PersistentCalls:
       m_Calls: []
-  applyKnockback: 1
-  knockbackSystem: {fileID: 0}
+  invincibilityDuration: 0.5
 --- !u!1 &939514746
 GameObject:
   m_ObjectHideFlags: 0

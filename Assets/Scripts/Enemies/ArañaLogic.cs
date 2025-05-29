@@ -60,27 +60,28 @@ public class ArañaLogic : MonoBehaviour
             {
                 isWaiting = false;
                 waitTimer = 0f;
-                currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length; // Cambia al siguiente punto de patrulla
+                currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
             }
         }
         else
         {
-            // Mueve la araña hacia el punto de patrulla actual
             Vector2 targetPosition = patrolPoints[currentPatrolIndex].position;
-            transform.position = Vector2.MoveTowards(transform.position, targetPosition, walkSpeed * Time.deltaTime);
+            
+            // Mover usando física (suave y sin teletransportación)
+            Vector2 newPosition = Vector2.MoveTowards(rb.position, targetPosition, walkSpeed * Time.deltaTime);
+            rb.MovePosition(newPosition);
 
-            // Voltea el sprite según la dirección del movimiento
-            if (targetPosition.x > transform.position.x)
+            // Flip del sprite (igual que antes)
+            if (targetPosition.x > rb.position.x)
             {
-                transform.localScale = new Vector3(1, 1, 1); // Derecha
+                transform.localScale = new Vector3(1, 1, 1);
             }
             else
             {
-                transform.localScale = new Vector3(-1, 1, 1); // Izquierda
+                transform.localScale = new Vector3(-1, 1, 1);
             }
 
-            // Si llega al punto de patrulla, espera un momento
-            if (Vector2.Distance(transform.position, targetPosition) < 0.1f)
+            if (Vector2.Distance(rb.position, targetPosition) < 0.1f)
             {
                 isWaiting = true;
             }
@@ -127,7 +128,7 @@ public class ArañaLogic : MonoBehaviour
             {
                 playerHealth.TakeDamage(contactDamage);
                 
-                // Aplicar knockback
+                // Aplicar knockback SOLO al jugador
                 Vector2 knockbackDirection = (collision.transform.position - transform.position).normalized;
                 Rigidbody2D playerRb = collision.gameObject.GetComponent<Rigidbody2D>();
                 if(playerRb != null)
@@ -135,6 +136,9 @@ public class ArañaLogic : MonoBehaviour
                     playerRb.velocity = Vector2.zero;
                     playerRb.AddForce(knockbackDirection * knockbackForce, ForceMode2D.Impulse);
                 }
+
+                // Congelar temporalmente el movimiento del enemigo (opcional)
+                rb.velocity = new Vector2(0, rb.velocity.y); // Solo frena en X, sigue aplicando gravedad
             }
         }
     }

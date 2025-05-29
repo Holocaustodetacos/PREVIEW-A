@@ -1,36 +1,57 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(Rigidbody2D),typeof(Animator))]
 public class PlayerController : MonoBehaviour
 {
+    [Header("Configuración Básica")]
     public int vidas = 3;
     public Transform puntoRespawn;
-    public float speed = 10f;
-    public float jumpForce = 6f;
-    public float maxJumpForce = 10f; 
-    public float fastFallSpeed = 10f;
-    public Transform groundCheck;
-    public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
-    public Rigidbody2D rb;
-    private Animator animator;
+    public bool canMove = true;
+
+    [Header("Movimiento")]
+    public float speed = 10f;
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.2f;
     private Vector2 movement;
-    private bool isGround;
+    private bool isGrounded;
+
+    [Header("Salto")]
+    public float jumpForce = 6f;
+    public float maxJumpForce = 10f;
     private float currentJumpForce = 0f;
-    private bool isGrounded = false;
     private bool isJumping = false;
     private bool canDoubleJump = false;
+    private bool hasJumped = false;
+
+    [Header("Caída")]
+    public float fastFallSpeed = 10f;
     private bool isFalling = false;
     private bool isFallingFast = false;
+
+    [Header("Dash")]
+    public float dashDistance = 5f;
+    public float dashDuration = 0.2f;
+    public float dashCooldown = 1f;
+    public ParticleSystem dashParticles;
+    private bool isDashing = false;
+    private float dashEndTime;
+    private float nextDashTime = 0f;
+    private Vector2 dashDirection;
+
+    [Header("Animaciones")]
+    private Animator animator;
     private bool isIdle = false;
-    private bool hasJumped = false;
-    private int auxJump = 0;
-    private bool canMove = true;
+
+    [Header("Referencias")]
+    private Rigidbody2D rb;
 
     [Header("Eventos")]
-    public UnityEvent onLivesChanged; // Evento cuando cambian las vidas
+    public UnityEvent onLivesChanged;
 
-    void Start()
+    #region Unity Methods
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
@@ -40,186 +61,199 @@ public class PlayerController : MonoBehaviour
     {
         if(!canMove) return;
 
-        isGround = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        //isGrounded = // Debo crear otra variable para detectar el suelo?
-        float moverHorizontal = Input.GetAxisRaw("Horizontal");
+        HandleDash();
+        HandleMovement();
+        HandleJump();
+        HandleFastFall();
+        HandleAnimations();
+        HandleAttack();
+    }
 
-        // Crear vector de movimiento
-        movement = new Vector2(moverHorizontal, rb.velocity.y);
-        rb.velocity = new Vector2(movement.x * speed * Time.deltaTime, rb.velocity.y);
-
-        animator.SetBool("isWalking", movement.magnitude > 0);
-        animator.SetBool("facingLeft", moverHorizontal < 0);
-        animator.SetBool("facingRight", moverHorizontal > 0);
-
-        if (isGround)
+    void FixedUpdate()
+    {
+        if(isDashing)
         {
+            rb.velocity = dashDirection * (dashDistance / dashDuration);
+        }
+        else
+        {
+            rb.velocity = new Vector2(movement.x * speed, rb.velocity.y);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
+        {
+            isGrounded = true;
             canDoubleJump = true;
-            currentJumpForce = 0f;
-            isJumping = false;
-            isFalling = false;
-            isFallingFast = false;
-            hasJumped = false;
-            isIdle = true;
-            animator.SetBool("isFalling", false);
-            animator.SetBool("isFallingFast", false);
-            animator.SetBool("Attack", false);
+            ResetJumpState();
         }
-        else if (rb.velocity.y < 0 && !isFallingFast)
+    }
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
         {
-            isFalling = true;
-            animator.SetBool("isFalling", true);
+            isGrounded = false;
         }
-        else if (rb.velocity.y > 0)
+    }
+    #endregion
+
+    #region Movement Methods
+    private void HandleMovement()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        float moveInput = Input.GetAxisRaw("Horizontal");
+        movement = new Vector2(moveInput, rb.velocity.y);
+    }
+
+    private void HandleDash()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift) && Time.time >= nextDashTime && !isDashing)
         {
-            isFalling = false;
-            animator.SetBool("isFalling", false);
+            StartDash();
         }
 
-        // Verifica si se presionó el botón M1 (clic izquierdo del mouse)
-        if (Input.GetMouseButton(0)) // 0 = clic izquierdo, 1 = clic derecho, 2 = clic central
+        if(isDashing && Time.time >= dashEndTime)
         {
-            // Activa el trigger "Attack" en el Animator
-            animator.SetBool("Attack", true);
+            EndDash();
         }
+    }
 
-        // Saltar solo si el jugador está en el suelo y no ha saltado
-        if (Input.GetKeyDown(KeyCode.W) && isGround && !hasJumped)
+    private void StartDash()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Dashing");
+        isDashing = true;
+        dashEndTime = Time.time + dashDuration;
+        nextDashTime = Time.time + dashCooldown;
+        
+        float moveInput = Input.GetAxisRaw("Horizontal");
+        dashDirection = moveInput != 0 ? 
+            new Vector2(moveInput, 0) : 
+            new Vector2(transform.localScale.x > 0 ? 1 : -1, 0);
+        
+        rb.gravityScale = 0;
+        rb.velocity = Vector2.zero;
+        
+        if(dashParticles != null) dashParticles.Play();
+        animator.SetTrigger("Dash");
+    }
+
+    private void EndDash()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        isDashing = false;
+        rb.gravityScale = 1;
+        rb.velocity = dashDirection * (speed * 0.5f);
+    }
+    #endregion
+
+    #region Jump Methods
+    private void HandleJump()
+    {
+        if (Input.GetKeyDown(KeyCode.W) && isGrounded && !hasJumped)
         {
             Jump();
         }
 
-        // Ajustar la fuerza del salto mientras se mantiene presionada la tecla de salto
         if (Input.GetKey(KeyCode.W) && isJumping)
         {
             currentJumpForce += jumpForce * Time.deltaTime;
             currentJumpForce = Mathf.Clamp(currentJumpForce, 0f, maxJumpForce);
         }
 
-        // Aplicar la fuerza del salto cuando se suelta la tecla de salto
         if (Input.GetKeyUp(KeyCode.W) && isJumping)
         {
             rb.velocity = new Vector2(rb.velocity.x, currentJumpForce);
             currentJumpForce = 0f;
             isJumping = false;
         }
+    }
 
-        // Detectar si se presiona la tecla "S" para descender rápidamente
+    private void Jump()
+    {
+        if (isGrounded && !hasJumped)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);         
+            hasJumped = true;
+            isJumping = true;
+            animator.SetBool("isJumping", true);
+        }
+    }
+
+    private void ResetJumpState()
+    {
+        isJumping = false;
+        currentJumpForce = 0f;
+        hasJumped = false;
+        animator.SetBool("isJumping", false);
+    }
+    #endregion
+
+    #region Other Mechanics
+    private void HandleFastFall()
+    {
         if (Input.GetKey(KeyCode.S))
         {
-            rb.velocity = new Vector2(rb.velocity.x, -fastFallSpeed); // Ajusta la velocidad de descenso rápido
+            rb.velocity = new Vector2(rb.velocity.x, -fastFallSpeed);
             isFallingFast = true;
-            animator.SetBool("isFallingFast", true); // Activar animación de caída rápida
+            animator.SetBool("isFallingFast", true);
         }
+    }
 
-        // Actualizar animación de caída según la velocidad vertical
-        if (rb.velocity.y < 0 && !isFalling && !isFallingFast)
+    private void HandleAttack()
+    {
+        if (Input.GetMouseButton(0))
         {
-            isFalling = true;
-            animator.SetBool("isFalling", true);
+            animator.SetBool("Attack", true);
         }
-        else if (rb.velocity.y >= 0 && (isFalling || isFallingFast))
+    }
+
+    private void HandleAnimations()
+    {
+        animator.SetBool("isWalking", movement.magnitude > 0);
+        animator.SetBool("facingLeft", movement.x < 0);
+        animator.SetBool("facingRight", movement.x > 0);
+
+        if (isGrounded)
         {
             isFalling = false;
             isFallingFast = false;
             animator.SetBool("isFalling", false);
             animator.SetBool("isFallingFast", false);
         }
-
-        // Detectar si el jugador está inactivo
-        if (moverHorizontal == 0 && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        else if (rb.velocity.y < 0 && !isFallingFast)
         {
-            isIdle = true;
-            animator.SetBool("isIdle", true);
+            isFalling = true;
+            animator.SetBool("isFalling", true);
         }
-        else
-        {
-            isIdle = false;
-            animator.SetBool("isIdle", false);
-        }
-    }
 
-
-    void FixedUpdate()
-    {
-        rb.velocity = new Vector2(movement.x * speed, rb.velocity.y);
-    }
-
-    private void Jump()
-    {
-        if (isGround && !hasJumped)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);         
-            hasJumped = true; // Marca que el personaje ha saltado
-            animator.SetBool("isJumping", true);
-        }
+        animator.SetBool("isIdle", movement.x == 0 && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S));
     }
 
     public void Morir()
     {
         transform.position = puntoRespawn.position;
         GetComponent<SpriteRenderer>().enabled = true;
-        
-        if (rb != null)
-        {
-            rb.velocity = Vector2.zero;
-        }
+        rb.velocity = Vector2.zero;
         
         if (vidas > 0)
         {
             vidas--;
-        
-            HealthSystem healthSystem = GetComponent<HealthSystem>();
-            if(healthSystem != null)
-            {
-                healthSystem.RestoreFullHealth(); // Usa el nuevo método
-            }
-            
-            Debug.Log("¡Has muerto! Vidas restantes: " + vidas + ". Vida restablecida.");
+            GetComponent<HealthSystem>()?.RestoreFullHealth();
             onLivesChanged.Invoke();
-            
-            transform.position = puntoRespawn.position;
         }
         else
         {
-            Debug.Log("Game Over");
             gameObject.SetActive(false);
-        }
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
-        {
-            isGround = true;
-            canDoubleJump = true;
-            isJumping = false;
-            isFalling = false;
-            isFallingFast = false;
-            isIdle = false;
-            animator.SetBool("isJumping", false);
-            animator.SetBool("isFalling", false);
-            animator.SetBool("isFallingFast", false);
-            animator.SetBool("isIdle", false);
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
-        {
-            isGround = false;
         }
     }
 
     public void SetMovementEnabled(bool enabled)
     {
         canMove = enabled;
-        if(!enabled)
-        {
-            // Detener movimiento inmediato
-            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        }
+        if(!enabled) rb.velocity = Vector2.zero;
     }
+    #endregion
 }
-
