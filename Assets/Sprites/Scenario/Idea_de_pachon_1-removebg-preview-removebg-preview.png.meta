@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7278df479c7346444a40bd2a8eb6584f
+guid: 2d60c2db6b35d4b428e9b35327064c84
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -110,28 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Idea_de_pachon_1-removebg-preview_0
-      rect:
-        serializedVersion: 2
-        x: 38
-        y: 86
-        width: 75
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 353e0b10b8efb224383bcad767e3415d
-      internalID: -630561611
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Idea_de_pachon_1-removebg-preview_1
+      name: Idea_de_pachon_1-removebg-preview-removebg-preview_1
       rect:
         serializedVersion: 2
         x: 172
@@ -145,56 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f9b9e2a49e31eb46bca54babd81f08f
-      internalID: -1467877471
+      spriteID: 8a1eaa267bdc0bd4a8f9794805fc3d6a
+      internalID: -103715531
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idea_de_pachon_1-removebg-preview_2
-      rect:
-        serializedVersion: 2
-        x: 312
-        y: 91
-        width: 75
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: efbf2705aa383bb448b8a0da5e905965
-      internalID: -1859321187
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Idea_de_pachon_1-removebg-preview_3
-      rect:
-        serializedVersion: 2
-        x: 38
-        y: 66
-        width: 75
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c1db1e4c23cac04e8a4ce24197783ab
-      internalID: 1442837654
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Idea_de_pachon_1-removebg-preview_4
+      name: Idea_de_pachon_1-removebg-preview-removebg-preview_4
       rect:
         serializedVersion: 2
         x: 173
@@ -208,29 +145,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c0e8ecf33c6628345b2ebda86bc8c192
-      internalID: 1135804184
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Idea_de_pachon_1-removebg-preview_5
-      rect:
-        serializedVersion: 2
-        x: 311
-        y: 66
-        width: 75
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fb8e257bafeeeb1439ff1a55b528e12c
-      internalID: -222947659
+      spriteID: 569afcd50de618349beb4abe33fc373e
+      internalID: 1668814727
       vertices: []
       indices: 
       edges: []
@@ -246,12 +162,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Idea_de_pachon_1-removebg-preview_0: -630561611
-      Idea_de_pachon_1-removebg-preview_1: -1467877471
-      Idea_de_pachon_1-removebg-preview_2: -1859321187
-      Idea_de_pachon_1-removebg-preview_3: 1442837654
-      Idea_de_pachon_1-removebg-preview_4: 1135804184
-      Idea_de_pachon_1-removebg-preview_5: -222947659
+      Idea_de_pachon_1-removebg-preview-removebg-preview_0: 2065302358
+      Idea_de_pachon_1-removebg-preview-removebg-preview_1: -103715531
+      Idea_de_pachon_1-removebg-preview-removebg-preview_2: -1543929451
+      Idea_de_pachon_1-removebg-preview-removebg-preview_3: -922574176
+      Idea_de_pachon_1-removebg-preview-removebg-preview_4: 1668814727
+      Idea_de_pachon_1-removebg-preview-removebg-preview_5: -840538305
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
